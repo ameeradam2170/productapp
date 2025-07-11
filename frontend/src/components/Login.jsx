@@ -2,9 +2,12 @@ import React from 'react'
 import {Box, Button, Container, TextField, Typography} from '@mui/material'
 import { useState } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 const Login = () => {
-    var [user,setUser] =useState({})
+       const baseURl = import.meta.env.VITE_API_BASE_URL
+
+    var [user,setUser] =useState({});
+    var navigate = useNavigate()
     const inputHandler = (e)=>{
         // console.log(e.target.value)
         setUser({...user,[e.target.name]:e.target.value})
@@ -13,10 +16,12 @@ const Login = () => {
 
     const addUser = ()=>{
         axios
-            .post("http://localhost:3000/api/login",user)
+            .post(`${baseURl}/api/login`,user)
             .then((res)=>{
                 console.log(res)
+                sessionStorage.setItem("role",res.data.user.role)
                 alert(res.data.message)
+                navigate('/p')
             })
             .catch((err)=>{console.log(err)})
     }

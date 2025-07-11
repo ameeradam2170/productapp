@@ -6,6 +6,12 @@ import { Link, useNavigate } from 'react-router-dom'
 
 
 const Signup = () => {
+
+
+
+    
+   const baseURl = import.meta.env.VITE_API_BASE_URL
+
     var [inputs,setinputs]= useState({})
     var navigate=useNavigate()
     const inputhandler =(e)=>{
@@ -14,7 +20,7 @@ const Signup = () => {
         console.log(inputs)
     }
     const addData =()=>{
-        axios.post("http://localhost:3000/api",inputs)
+        axios.post(`${baseURl}/api`,inputs)
         .then((res)=>{console.log(res)
             alert(res.data.message)
             navigate('/')
@@ -54,6 +60,7 @@ const Signup = () => {
         label='password'
         margin='normal'
         name='password'
+        type='password'
         onChange={inputhandler}>
 
         </TextField>

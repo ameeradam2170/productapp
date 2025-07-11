@@ -1,10 +1,14 @@
 import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Admin = () => {
+  const baseURl = import.meta.env.VITE_API_BASE_URL
     var navigate = useNavigate();
+    var {state}=useLocation()
+    // console.log("state",state)
+    const editingPro = state?.val;
   var[pro,setPro] = useState({
       proName:"" ,
        price:"",
@@ -12,7 +16,18 @@ const Admin = () => {
          stock:"",
          images:[]                    
   });
+   useEffect(()=>{ if(editingPro){
+      
+      const{proName,price,dis,stock}=editingPro
+      setPro({...pro,
+        proName:proName || "",
+         price:price ||"",
+         dis:dis || "",
+         stock:stock ||"",
+         images:[]
 
+      })
+    }},[])
     const inputHandler = (e)=>{
         // console.log(e.target.value)
         setPro({...pro,[e.target.name]:e.target.value})
@@ -28,13 +43,24 @@ const Admin = () => {
       pro.images.forEach((file)=>{
         formData.append("images",file);
       })
-axios.post("http://localhost:3000/p",formData)
+if(editingPro){
+axios.put(`${baseURl}/p/${editingPro._id}`,formData)
+      .then((res)=>{
+       alert(res.data.message)
+       navigate('/p')
+      })
+      .catch((err)=>{
+        cobnsole.log(err)
+      })
+}else{
+axios.post(`${baseURl}/p`,formData)
       .then((res)=>{
         console.log(res)
         alert(res.data.message);
         navigate('/p');
       })
       .catch((err)=>{console.log(err)})
+}
     }
   return (
     <div>
@@ -60,6 +86,7 @@ axios.post("http://localhost:3000/p",formData)
                             margin='normal'
                             color='secondary'
                             name='proName'
+                            value={pro.proName}
                             onChange={inputHandler}
                             />
                            
@@ -69,6 +96,7 @@ axios.post("http://localhost:3000/p",formData)
                             margin='normal'
                             color='secondary'
                             name='price'
+                            value={pro.price}
                             onChange={inputHandler}
                          /> 
                         <TextField 
@@ -77,6 +105,7 @@ axios.post("http://localhost:3000/p",formData)
                             margin='normal'
                             color='secondary'
                             name='dis'
+                            value={pro.dis}
                            onChange={inputHandler}
                          />
                           <TextField 
@@ -85,6 +114,7 @@ axios.post("http://localhost:3000/p",formData)
                             margin='normal'
                             color='secondary'
                             name='stock'
+                            value={pro.stock }
                            onChange={inputHandler}
                          />
                          <Button variant='outlined' >

@@ -6,8 +6,8 @@ import { Route, Routes } from 'react-router-dom'
 import Signup from './components/Signup'
 import Login from './components/Login'
 import Main from './components/Main'
-import Admin from './components/admin'
-import Products from './components/products'
+import Admin from './components/Admin'
+import Products from './components/Products'
 
 
 
@@ -21,6 +21,7 @@ function App() {
       <Route path='/s' element={<Signup></Signup>}> </Route>
       <Route path='/a' element={<Main data={<Admin></Admin>}/>}> </Route>
       <Route path='/p' element={<Main data={<Products></Products>}/>}/> 
+    
 
      </Routes>
     </>
